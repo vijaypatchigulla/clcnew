@@ -6,7 +6,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 992382605991.dkr.ecr.eu-west-1.amazonaws.com
-      - REPOSITORY_URI=992382605991.dkr.ecr.eu-west-1.amazonaws.com/ctcnew:latest1
+      - REPOSITORY_URI=992382605991.dkr.ecr.eu-west-1.amazonaws.com/ctcnew
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - TASK_DEFINITION_FAMILY="ctcnew"
       - TIMESTAMP=$(date '+%Y%m%d%H%M%S')
@@ -15,7 +15,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build --tag $REPOSITORY_URI:latest ia1quantum01/jar/.
+      - docker build --tag $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -23,7 +23,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"ia1quantum01","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"ctcnew","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
     files: 
